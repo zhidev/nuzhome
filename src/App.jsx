@@ -4,74 +4,15 @@ import { ReactFlow, useNodesState } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import dragonair from './Dragonair.png'
 import dragapult from './Dragapult.png'
+import PokemonImageNode from './nodes/PokemonImageNode.jsx';
+import {createPokemonNode, addPokemon} from './nodes/PokemonNode.jsx'
 
 const MAX_MON_NODES = 90;
-
-function PokemonImageNode({ data }) {
-  return (
-    <img
-      src={data.image}
-      alt={data.species}
-      style={{    //refacotr this to css later
-        width: '100%',
-        display: 'block'
-      }}
-      draggable={false}
-    />
-  );
-}
-
-//Thanks for having a repo :D
-function getPokemonImageUrl(species) {
-  return `https://raw.githubusercontent.com/May8th1995/sprites/master/${species}.png`;
-}
 
 /* For Default Starting Node for Testing */
 const initialNodes =[   
   createPokemonNode(1, dragonair, 100, 100)
 ];
-
-function createPokemonNode(species, image, x, y) {
-      console.log("Debug inside createPokemonNode")
-
-  return {
-    id: String(species),
-    type: 'imageNode',
-    position: { x, y },
-    data: { 
-      image,
-      species
-    },
-
-    style: {
-      width: '40px',
-      height: '30px',
-      padding: 0,
-      border: 'none',
-      background: 'transparent'
-    }
-  };
-}
-
-function addPokemon(species, setNodes){
-      console.log("Debug inside AddPokemon")
-
-  const speciesImage = getPokemonImageUrl(species);
-  const newNode = createPokemonNode(
-    species,
-    speciesImage,
-    200,
-    100
-  )
-  //Returns our new node
-  setNodes((nodes)=>{
-    if (nodes.some((node) => node.id ==species)){
-      return nodes;
-    }
-
-    return [...nodes,newNode];
-  });
-}
 
 function App() {
   const [count, setCount] = useState(0)
