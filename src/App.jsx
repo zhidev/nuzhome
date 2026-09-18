@@ -1,122 +1,133 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
 import './App.css'
+import { ReactFlow, useNodesState } from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import dragonair from './Dragonair.png'
+import dragapult from './Dragapult.png'
+
+const MAX_MON_NODES = 90;
+
+function PokemonImageNode({ data }) {
+  return (
+    <img
+      src={data.image}
+      alt={data.species}
+      style={{    //refacotr this to css later
+        width: '100%',
+        display: 'block'
+      }}
+      draggable={false}
+    />
+  );
+}
+
+//Thanks for having a repo :D
+function getPokemonImageUrl(species) {
+  return `https://raw.githubusercontent.com/May8th1995/sprites/master/${species}.png`;
+}
+
+/* For Default Starting Node for Testing */
+const initialNodes =[   
+  createPokemonNode(1, dragonair, 100, 100)
+];
+
+function createPokemonNode(species, image, x, y) {
+      console.log("Debug inside createPokemonNode")
+
+  return {
+    id: String(species),
+    type: 'imageNode',
+    position: { x, y },
+    data: { 
+      image,
+      species
+    },
+
+    style: {
+      width: '40px',
+      height: '30px',
+      padding: 0,
+      border: 'none',
+      background: 'transparent'
+    }
+  };
+}
+
+function addPokemon(species, setNodes){
+      console.log("Debug inside AddPokemon")
+
+  const speciesImage = getPokemonImageUrl(species);
+  const newNode = createPokemonNode(
+    species,
+    speciesImage,
+    200,
+    100
+  )
+  //Returns our new node
+  setNodes((nodes)=>{
+    if (nodes.some((node) => node.id ==species)){
+      return nodes;
+    }
+
+    return [...nodes,newNode];
+  });
+}
 
 function App() {
   const [count, setCount] = useState(0)
+  const [importText, setImportText] = useState()
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const nodeTypes = {
+    imageNode: PokemonImageNode
+  };
 
+  function onSubmit(event) {
+
+    event.preventDefault();
+    console.log(event)
+
+    const formData = new FormData(event.currentTarget);
+    const species = formData.get('importField');
+    addPokemon(species, setNodes);
+  }
+  
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+    <div>
+      <div style={{ width: '100vw', height: '90vh' }}>
+        <ReactFlow 
+          nodes={nodes} 
+          edges={[]} 
+          nodeTypes={nodeTypes}
+          onNodesChange={onNodesChange}
+          panOnDrag={false}
+        />
+      </div>
+
+      <div className="importPokemonSection">
+        <form 
+          className="importPokemonForm"
+          onSubmit={onSubmit}  
         >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          <label> File in your Mons here
+              <input 
+                type="text"
+                placeholder="Import your Pokemon here"
+                name="importField"
+              />
+            </label>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: 'blue',
+                color: 'white'
+              }}>
+              Add Pokemon
+            </button> {nodes.length}
+          </form>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    </div>
   )
+
 }
 
 export default App
