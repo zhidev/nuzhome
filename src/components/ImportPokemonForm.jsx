@@ -6,7 +6,7 @@ function ImportPokemonForm({onSubmit, nodeCount}){
           onSubmit={onSubmit}  
         >
           <label> File in your Mons here
-              <input 
+              <textarea 
                 type="text"
                 placeholder="Import your Pokemon here"
                 name="importField"

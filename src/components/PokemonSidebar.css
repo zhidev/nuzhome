@@ -36,3 +36,9 @@
   height: 100%;
   object-fit: contain;
 }
+
+.importPokemonForm textarea {
+    width: 75%;
+    height: 150px;
+    font-size: 12px;
+}

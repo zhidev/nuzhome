@@ -21,17 +21,4 @@ function PokemonSidebar({onSubmit, nodeCount}){
     );
 }
 
-    //   <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-    //     <button
-    //       className="sidebarTab"
-    //       onClick={()=> setSidebarOpen(!sidebarOpen)}>
-    //       <img src={pokeball_icon} alt="Open sidebar" />
-    //     </button>
-    //     <ImportPokemonForm
-    //       onSubmit={onSubmit}
-    //       nodeCount={nodes.length}
-    //     />
-    //   </aside>
-
-
 export default PokemonSidebar
