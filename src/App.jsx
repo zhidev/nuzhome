@@ -7,6 +7,7 @@ import dragapult from './Dragapult.png'
 import pokeball_icon from './assets/pokeball_icon.webp'
 import PokemonImageNode from './nodes/PokemonImageNode.jsx';
 import {createPokemonNode, addPokemon} from './nodes/PokemonNode.jsx'
+import PokemonSidebar from './components/PokemonSidebar.jsx';
 
 import PokemonCanvas from './components/PokemonCanvas.jsx'
 import ImportPokemonForm from './components/ImportPokemonForm.jsx';
@@ -25,12 +26,8 @@ function App() {
   const [count, setCount] = useState(0)
   const [importText, setImportText] = useState()
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-
 
   function onSubmit(event) {
-
     event.preventDefault();
     console.log(event)
 
@@ -46,17 +43,11 @@ function App() {
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
       />
-      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <button
-          className="sidebarTab"
-          onClick={()=> setSidebarOpen(!sidebarOpen)}>
-          <img src={pokeball_icon} alt="Open sidebar" />
-        </button>
-        <ImportPokemonForm
-          onSubmit={onSubmit}
-          nodeCount={nodes.length}
-        />
-      </aside>
+
+      <PokemonSidebar
+        onSubmit={onSubmit}
+        nodeCount={nodes.length}
+      />
     </div>
   )
 
